@@ -4,6 +4,7 @@ import { AppModule } from './app/app.module';
 import buildApiDocs from './docs/swagger.builder';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import ConfigEnv from './config/config.env';
+import appConfig, { AppConfigStrategies } from './config/app-config/app-config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,6 +12,8 @@ async function bootstrap() {
   if (Number(ConfigEnv.DOCS_GENERATE) === 1) {
     buildApiDocs(app, ConfigEnv);
   }
+  
+  appConfig.init(AppConfigStrategies.env);
 
   app.useGlobalPipes(new ValidationPipe());
   app.enableVersioning({

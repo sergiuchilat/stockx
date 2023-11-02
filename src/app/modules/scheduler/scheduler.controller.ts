@@ -2,6 +2,7 @@ import {Controller, Get, Query} from "@nestjs/common";
 import {SchedulerService} from "./services/scheduler.service";
 import {FileManagerService} from "../files/modules/file-manager/services/file-manager.service";
 import {ImageProcessorService} from "../files/modules/image-processor/services/image-processor.service";
+import appConfig, { AppConfigStrategies } from "src/config/app-config/app-config";
 
 @Controller()
 export class SchedulerController {
@@ -12,6 +13,11 @@ export class SchedulerController {
     ) {
     }
 
+    @Get('app-config')
+    getAppConfig(): any{
+        return appConfig.getConfig();
+    }
+   
     @Get('scheduler/parse')
     parseItems(): string{
         return this.schedulerService.parse('https://stockx.com')
