@@ -1,11 +1,16 @@
+import { title } from "process";
 import AppConfigInterface from "../interfaces/app-config.interface";
-import { DbDriver } from "../interfaces/db-config.interface";
+import { DbDriver } from "../interfaces/components/db-config.interface";
 
 export default class EnvConfigStrategy {
-    private config: AppConfigInterface = null
+    private readonly config: AppConfigInterface = null
 
     constructor() {
         this.config = {
+            app: {
+                port: process.env.APP_PORT,
+                requestTimeout: Number(process.env.APP_REQUEST_TIMEOUT)
+            },
             db: {
                 host: process.env.DB_HOST,
                 port: process.env.DB_PORT,
@@ -15,8 +20,15 @@ export default class EnvConfigStrategy {
                 driver: DbDriver[process.env.DB_DRIVER]
             },
             jwt: {
-                secret: process.env.JWT_SECRET,
-                expiresIn: process.env.JWT_EXPIRES_IN
+                secret: process.env.JWT_SECRET_KEY,
+                expiresIn: process.env.JWT_TOKEN_EXPIRES_IN
+            },
+            docs: {
+                generate: process.env.DOCS_GENERATE === 'true',
+                path: process.env.DOCS_PATH,
+                version: process.env.DOCS_VERSION,
+                title: process.env.DOCS_TITLE,
+                description: process.env.DOCS_DESCRIPTION
             }
         }
     }
@@ -24,5 +36,4 @@ export default class EnvConfigStrategy {
     public getConfig() {
         return this.config
     }
-
 }

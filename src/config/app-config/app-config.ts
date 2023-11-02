@@ -1,7 +1,10 @@
 import AppConfigInterface from "./interfaces/app-config.interface";
 import EnvConfigStrategy from "./strategies/env-config-strategy";
+import AppConfigValidator from "./validators/app-config.validator";
 import DbConfigValidator from "./validators/db-config.validator";
 import * as dotenv from 'dotenv';
+import DocsConfigValidator from "./validators/docs-config.validator";
+import JsonPlainConfigStrategy from "./strategies/json-plain-config-strategy";
 dotenv.config();
 
 export enum AppConfigStrategies {
@@ -13,10 +16,15 @@ class AppConfig {
     private static instance: AppConfig = null;
 
     private configStrategies = {
-        'env': new EnvConfigStrategy()
+        'env': new EnvConfigStrategy(),
+        'json': new JsonPlainConfigStrategy()
     }
     
     private config: AppConfigInterface = {
+        app: {
+            port: null,
+            requestTimeout: 0
+        },
         db: {
             host: null,
             port: null,
@@ -28,6 +36,13 @@ class AppConfig {
         jwt: {
             secret: null,
             expiresIn: null
+        },
+        docs:{
+            generate: false,
+            path: null,
+            version: null,
+            title: null,
+            description: null
         }
     };
 
@@ -39,6 +54,8 @@ class AppConfig {
 
     private validateConfig() {
         DbConfigValidator.validate(this.config.db)
+        AppConfigValidator.validate(this.config.app)
+        DocsConfigValidator.validate(this.config.docs)
     }
 
     public init(strategy: AppConfigStrategies) {

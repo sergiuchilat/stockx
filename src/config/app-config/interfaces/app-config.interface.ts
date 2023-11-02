@@ -1,7 +1,11 @@
-import DbConfigInterface from "./db-config.interface";
-import JwtConfigInterface from "./jwt-config.interface";
+import DbConfigInterface from "./components/db-config.interface";
+import JwtConfigInterface from "./components/jwt-config.interface";
+import DocsConfigInterface from "./components/docs-config.interface";
+import AppConfigInterface from "./components/app-config.interface";
 
-export default interface AppConfigInterface{
-    db: DbConfigInterface;
+export default interface ConfigInterface{
+    app: AppConfigInterface
+    db: DbConfigInterface
     jwt: JwtConfigInterface
+    docs: DocsConfigInterface
 }

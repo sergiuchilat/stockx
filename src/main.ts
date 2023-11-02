@@ -9,16 +9,16 @@ import appConfig, { AppConfigStrategies } from './config/app-config/app-config';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  if (Number(ConfigEnv.DOCS_GENERATE) === 1) {
+  appConfig.init(AppConfigStrategies.json);
+
+  if (appConfig.getConfig().docs.generate) {
     buildApiDocs(app, ConfigEnv);
   }
   
-  appConfig.init(AppConfigStrategies.env);
-
   app.useGlobalPipes(new ValidationPipe());
   app.enableVersioning({
     type: VersioningType.URI,
   });
-  await app.listen(ConfigEnv.API_SERVER_PORT);
+  await app.listen(appConfig.getConfig().app.port);
 }
 bootstrap();
